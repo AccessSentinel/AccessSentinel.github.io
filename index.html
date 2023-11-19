@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Confirmation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+            background-color: #1a1a1a;
+            color: #fff;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Email Confirmation</h1>
+
+    <div id="emailConfirmation" class="hidden">
+        <p>Thank you for registering! An email confirmation has been sent to your email address. Please check your inbox and follow the instructions to complete the registration process.</p>
+    </div>
+
+    <script>
+        function register() {
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+
+            if (!email.includes('@') || !password) {
+                alert('Please enter a valid email and password.');
+                return;
+            }
+
+            // Simulate sending a confirmation email (in a real-world scenario, use a server and email service)
+            fetch('/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, password }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('registerContainer').style.display = 'none';
+                    document.getElementById('emailConfirmation').classList.remove('hidden');
+                } else {
+                    alert(data.message || 'An error occurred. Please try again.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again.');
+            });
+        }
+    </script>
+
+    <div id="registerContainer">
+        <form id="registerForm">
+            <label for="registerEmail">Email:</label>
+            <input type="text" id="registerEmail" required>
+            <br>
+            <label for="registerPassword">Password:</label>
+            <input type="password" id="registerPassword" required>
+            <br>
+            <button type="button" onclick="register()">Register</button>
+        </form>
+    </div>
+</body>
+</html>
